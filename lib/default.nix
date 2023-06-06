@@ -23,6 +23,7 @@ rec {
     ++ builtins.map (p: modulesPath + p) [
       "/system/boot/init.nix"
       "/system/boot/systemd.nix"
+      "/system/activation/activation-script.nix"
       "/config/system-path.nix"
     ] ++ [
       ({ lib, config, pkgs, ... }: {

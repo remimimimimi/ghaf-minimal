@@ -31,9 +31,11 @@
       in
       {
         formatter = pkgs.alejandra;
+        packages.default = self.nixosConfigurations.t.config.system.build.vm;
       }))
 
       {
+        nixosConfigurations.t = self.lib.evalConfig [ ];
         lib = import ./lib { inherit self; };
       }
 

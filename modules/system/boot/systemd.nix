@@ -442,19 +442,19 @@ in
 
     system.build.units = cfg.units;
 
-    system.nssModules = [ cfg.package.out ];
-    system.nssDatabases = {
-      hosts = (mkMerge [
-        (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is mkBefore'd)
-        (mkOrder 999 [ "myhostname" ]) # after files (which is 998), but before regular nss modules
-      ]);
-      passwd = (mkMerge [
-        (mkAfter [ "systemd" ])
-      ]);
-      group = (mkMerge [
-        (mkAfter [ "systemd" ])
-      ]);
-    };
+    # system.nssModules = [ cfg.package.out ];
+    # system.nssDatabases = {
+    #   hosts = (mkMerge [
+    #     (mkOrder 400 [ "mymachines" ]) # 400 to ensure it comes before resolve (which is mkBefore'd)
+    #     (mkOrder 999 [ "myhostname" ]) # after files (which is 998), but before regular nss modules
+    #   ]);
+    #   passwd = (mkMerge [
+    #     (mkAfter [ "" ])
+    #   ]);
+    #   group = (mkMerge [
+    #     (mkAfter [ "systemd" ])
+    #   ]);
+    # };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -525,7 +525,7 @@ in
         "systemd/system-shutdown" = { source = hooks "shutdown" cfg.shutdown; };
       });
 
-    services.dbus.enable = true;
+    # services.dbus.enable = true;
 
     users.users.systemd-network = {
       uid = config.ids.uids.systemd-network;
