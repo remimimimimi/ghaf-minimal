@@ -527,19 +527,19 @@ in
 
     # services.dbus.enable = true;
 
-    users.users.systemd-network = {
-      uid = config.ids.uids.systemd-network;
-      group = "systemd-network";
-    };
-    users.groups.systemd-network.gid = config.ids.gids.systemd-network;
-    users.users.systemd-resolve = {
-      uid = config.ids.uids.systemd-resolve;
-      group = "systemd-resolve";
-    };
-    users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
+    # users.users.systemd-network = {
+    #   uid = config.ids.uids.systemd-network;
+    #   group = "systemd-network";
+    # };
+    # users.groups.systemd-network.gid = config.ids.gids.systemd-network;
+    # users.users.systemd-resolve = {
+    #   uid = config.ids.uids.systemd-resolve;
+    #   group = "systemd-resolve";
+    # };
+    # users.groups.systemd-resolve.gid = config.ids.gids.systemd-resolve;
 
-    # Target for ‘charon send-keys’ to hook into.
-    users.groups.keys.gid = config.ids.gids.keys;
+    # # Target for ‘charon send-keys’ to hook into.
+    # users.groups.keys.gid = config.ids.gids.keys;
 
     systemd.targets.keys =
       {

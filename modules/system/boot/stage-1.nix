@@ -19,7 +19,7 @@ let
 
   # Determine the set of modules that we need to mount the root FS.
   modulesClosure = pkgs.makeModulesClosure {
-    rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
+    # rootModules = config.boot.initrd.availableKernelModules ++ config.boot.initrd.kernelModules;
     kernel = modulesTree;
     firmware = firmware;
     allowMissing = false;
@@ -326,8 +326,8 @@ let
 
     inherit (config.system.build) earlyMountScript;
 
-    inherit (config.boot.initrd) checkJournalingFS verbose
-      preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
+    # inherit (config.boot.initrd) checkJournalingFS verbose
+    #   preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
                     (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
