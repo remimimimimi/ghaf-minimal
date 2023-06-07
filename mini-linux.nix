@@ -13,13 +13,13 @@ let
   init = writeText "init" ''
     #!/bin/sh
 
-    mount -t proc none /proc
-    mount -t sysfs none /sys
+    /bin/mkdir /proc && /bin/mount -t proc none /proc
+    /bin/mkdir /sys && /bin/mount -t sysfs none /sys
 
     cat <<!
 
 
-    Boot took $(cut -d' ' -f1 /proc/uptime) seconds
+    Boot took $(/bin/awk '{ print $1 }' /proc/uptime) seconds
 
             _       _     __ _
       /\/\ (_)_ __ (_)   / /(_)_ __  _   ___  __
