@@ -1,4 +1,4 @@
-{ runCommand, stdenv, lib, writeText, linux_latest, linuxManualConfig, busybox, cpio, ... }:
+{ runCommand, stdenv, lib, writeText, closureInfo, linux_latest, linuxManualConfig, busybox, cpio, ... }:
 let
   baseKernel = linux_latest;
   kernel = linuxManualConfig {
@@ -9,9 +9,12 @@ let
     # detect if modules are in used
     allowImportFromDerivation = true;
   };
-  busybox' = busybox.override { enableStatic = true; };
+  # busybox' = busybox.override { enableStatic = true; };
+  busybox' = busybox;
   init = writeText "init" ''
-    #!/bin/sh
+    #! ${busybox'}/bin/sh
+
+    ${busybox}/bin/ln -s ${busybox}/bin /bin
 
     mount -t proc none /proc
     mount -t sysfs none /sys
@@ -32,16 +35,29 @@ let
 
 
     !
-    exec /bin/sh
+
+    exec ${busybox'}/bin/sh
   '';
+
+  busyboxClosureInfo = closureInfo {
+    rootPaths = [ busybox' ];
+  };
 in
 runCommand "build-mini-linux" { } ''
   mkdir -p $out/initramfs
   cp ${kernel}/bzImage $out
-  cp -r ${busybox'}/bin $out/initramfs/
-  cp ${init} $out/initramfs/init
-  chmod +x $out/initramfs/init
+
   cd $out/initramfs
+
+  mkdir -p .//nix/store
+  for entry in  $(cat ${busyboxClosureInfo}/store-paths)
+  do
+    cp -r $entry ./nix/store
+  done
+
+  cp ${init} ./init
+  chmod +x ./init
+
   find . -print0 | ${cpio}/bin/cpio --null -ov --format=newc \
     | gzip -9 > ../initramfs.cpio.gz
 ''
