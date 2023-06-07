@@ -4,18 +4,12 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs =
     { self
     , nixpkgs
     , flake-utils
-    , nixos-generators
-    ,
     }:
     let
       systems = with flake-utils.lib.system; [
@@ -31,15 +25,14 @@
       in
       {
         formatter = pkgs.alejandra;
-        packages.default = self.nixosConfigurations.t.config.system.build.vm;
+        # NOTE: Run with
+        # ```
+        # qemu-system-x86_64 \
+        #   -kernel ./result/bzImage \
+        #   -initrd ./result/initramfs.cpio.gz \
+        #   -append "console=ttyS0" -enable-kvm -nographic
+        # ```
+        packages.default = pkgs.callPackage ./mini-linux.nix { };
       }))
-
-      {
-        nixosConfigurations.t = self.lib.evalConfig [ ];
-        lib = import ./lib { inherit self; };
-      }
-
-      # Target configurations
-      (import ./targets { inherit self; })
     ];
 }
