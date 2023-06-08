@@ -25,13 +25,7 @@
       in
       {
         formatter = pkgs.alejandra;
-        # NOTE: Run with
-        # ```
-        # qemu-system-x86_64 \
-        #   -kernel ./result/bzImage \
-        #   -initrd ./result/initramfs.cpio.gz \
-        #   -append "console=ttyS0" -enable-kvm -nographic
-        # ```
+        # NOTE: Run with `./qemu.sh`
         packages.default = pkgs.callPackage ./mini-linux.nix { };
       }))
     ];
