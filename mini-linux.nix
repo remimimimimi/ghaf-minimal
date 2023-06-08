@@ -50,7 +50,7 @@ let
   systemd' = systemdMinimal;
   systemClosureInfo = closureInfo {
     rootPaths = [
-      # busybox'
+      busybox'
       systemd'
     ];
   };
@@ -80,7 +80,6 @@ let
     [Service]
     Environment=HOME=/root
     WorkingDirectory=-/root
-    # ExecStartPre=-/nix/store/3zq94mlidvqr3fmkibw1migvp9k3lv7z-systemd-minimal-251.16/bin/plymouth --wait quit
     ExecStart=/bin/sh
     Type=idle
     StandardInput=tty-force
@@ -107,7 +106,6 @@ runCommand "build-mini-linux" { } ''
   ln -s ${busybox}/bin ./bin
 
   mkdir ./etc && cp -r ${systemd'}/example/* ./etc
-  # chown -R $(whoami) ./etc
 
   chmod -R +w ./etc
 
