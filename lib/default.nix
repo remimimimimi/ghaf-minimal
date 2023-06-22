@@ -1,13 +1,11 @@
-{ self
-, nixpkgs ? self.inputs.nixpkgs
-,
-}:
-rec {
-  baseModules =
-    let
-      nixosModulesPath = nixpkgs + "/nixos/modules";
-      modulesPath = ../modules;
-    in
+{
+  self,
+  nixpkgs ? self.inputs.nixpkgs,
+}: rec {
+  baseModules = let
+    nixosModulesPath = nixpkgs + "/nixos/modules";
+    modulesPath = ../modules;
+  in
     builtins.map (p: nixosModulesPath + p) [
       "/system/etc/etc.nix"
       # "/system/activation/activation-script.nix"
@@ -28,10 +26,16 @@ rec {
       "/system/activation/activation-script.nix"
       "/config/system-path.nix"
       "/stub.nix"
-    ] ++ [
-      ({ lib, config, pkgs, ... }: {
+    ]
+    ++ [
+      ({
+        lib,
+        config,
+        pkgs,
+        ...
+      }: {
         _module.args = {
-          utils = import (nixpkgs + "/nixos/lib/utils.nix") { inherit lib config pkgs; };
+          utils = import (nixpkgs + "/nixos/lib/utils.nix") {inherit lib config pkgs;};
         };
       })
       ({...}: {
@@ -40,7 +44,6 @@ rec {
         imports = [
           "${toString nixosModulesPath}/virtualisation/qemu-vm.nix"
         ];
-
 
         formatAttr = "vm";
       })
